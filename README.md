@@ -357,3 +357,23 @@ Where `50` is the receiver system id. Then, to route between those:
 
 Note that it's possible to setup multiple senders and receivers to see
 mavlink-router in action.
+
+
+
+# JOTHAM NOTES FOR APPLYING
+Port mapping
+5800	Ubuntu local server
+5200	Jetson-nano local server
+5000	GCS-Laptop local server
+	
+*ps: sebenernya bisa diganti aja (bebas)
+Langkah-langkah
+1. Di SBC (JETSON/RASPY)
+adrian@jetson-afj = ssh -R 5800:localhost:5200 ubuntu@ec2-3-92-61-125.compute-1.amazonaws.com
+adrian@jetson-afj = mavlink-routerd -t 5200 /dev/ttyACM0:150000
+2. Check di VPS (pakai mavproxy) udah nyambung apa belum
+ubuntu@awsec2 = mavproxy.py –master=tcp:127.0.0.1:5800
+3. Di GCS laptop
+ssh -i "webserverku.pem" -L 5100:ec2-3-92-61-125.compute-1.amazonaws.com:5800 ubuntu@ec2-3-92-61-125.compute-1.amazonaws.com
+4. Check koneksi pake mavproxxy atau mission planner/qground di GCS, check packet loss bisa di mavproxy
+5. Done
